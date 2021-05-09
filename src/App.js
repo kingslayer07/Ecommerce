@@ -1,6 +1,6 @@
 import React, { useEffect , useState} from 'react'
-import {commerce, commerec} from './lib/commerce'
-import {Products, Navbar, Cart } from './Components';
+import {commerce} from './lib/commerce'
+import {Products, Navbar, Cart, Checkout } from './Components';
 import {BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 function App()  {
     const [products, setProducts] = useState([])
@@ -46,14 +46,16 @@ function App()  {
             <Route exact path='/'>
             <Products products= {products} onAddToCart = {handleAddToCart}></Products>
             </Route>
-            <Route path='/cart'>
+            <Route exact path='/cart'>
             <Cart 
                 cart={cart}
                 handleUpdateCartQty = {handleUpdateCartQty}
                 handleRemoveFromCart = {handleRemoveFromCart}
                 handleEmptyCart = {handleEmptyCart}
                 ></Cart>
-
+            </Route>
+            <Route exact path='/checkout'>
+                <Checkout cart={cart} />
             </Route>
         </Switch>
         </div>

@@ -8,7 +8,7 @@ const Cart = ({cart, handleUpdateCartQty, handleRemoveFromCart, handleEmptyCart}
     // const isEmpty = !cart.line_items.length
     const EmptyCart = () =>{
 
-         <Typography  variant='subtitle1'>No items in your cart, still confused ?
+       return  <Typography  variant='subtitle1'>No items in your cart, still confused ?
                     <Link className={classes.link} to='/'>start adding some </Link>
         </Typography>
 
