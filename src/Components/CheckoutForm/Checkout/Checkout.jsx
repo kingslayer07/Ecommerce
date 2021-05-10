@@ -6,16 +6,17 @@ import useStyles from './styles'
 import {commerce} from '../../../lib/commerce' 
 const steps =['Shipping address', 'Payment details']
 
-const Checkout = ({cart}) => {
+const Checkout = ({cart, order, onCaptureCheckout, error}) => {
     const classes = useStyles()
     const [checkoutToken, setCheckoutToken] = useState(null)
     const [activeStep, setActiveStep] = useState(0)
+    const [shippingData, setShippingData] = useState({})
     
     useEffect(() =>{
         const generateToken = async () =>{
             try {
                 const token = await commerce.checkout.generateToken(cart.id, {type: 'cart'})
-                console.log(token)
+                
                 setCheckoutToken(token)
             } catch (error) {
                 
@@ -24,12 +25,21 @@ const Checkout = ({cart}) => {
         generateToken()
     },[cart])
 
+    const nextStep = () => setActiveStep((previousStep) => previousStep +1)
+    const backStep = () => setActiveStep((previousStep) => previousStep -1)
+
+    const next = (data) =>{
+        setShippingData(data)
+        nextStep()
+    }
+    
     const Confirmation =() =>{
         return   <div>pkka na ?</div>
     }
     
     const Form = () => activeStep === 0
-        ? <AddressForm checkoutToken={checkoutToken}/> : <PaymentForm />
+        ? <AddressForm checkoutToken={checkoutToken} next={next}/>
+         : <PaymentForm shippingData={shippingData} nextStep={nextStep} onCaptureCheckout={onCaptureCheckout} checkoutToken={checkoutToken} backStep={backStep} />
     
 
     return (
