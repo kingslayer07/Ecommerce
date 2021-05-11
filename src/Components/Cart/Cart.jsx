@@ -3,9 +3,11 @@ import {Container, Typography, Button, Grid} from '@material-ui/core'
 import useStyles from './styles'
 import CartItem from './CartItem/CartItem'
 import {Link} from 'react-router-dom'
-const Cart = ({cart, handleUpdateCartQty, handleRemoveFromCart, handleEmptyCart}) => {
+const Cart = ({cart, handleUpdateCartQty, handleRemoveFromCart, onEmptyCart}) => {
     const classes =useStyles()
     // const isEmpty = !cart.line_items.length
+    const handleEmptyCart = () => onEmptyCart()
+
     const EmptyCart = () =>{
 
        return  <Typography  variant='subtitle1'>No items in your cart, still confused ?
@@ -49,7 +51,7 @@ const Cart = ({cart, handleUpdateCartQty, handleRemoveFromCart, handleEmptyCart}
         <Container >
             <div className={classes.toolbar}></div>
             <Typography className={classes.title} variant='h4' gutterBottom>Your Shopping Cart</Typography>
-            {!cart.line_items.length ? <EmptyCart /> : < FilledCart/>}
+            {!cart.line_items.length ? EmptyCart() :  FilledCart()}
         </Container>       
         
     )

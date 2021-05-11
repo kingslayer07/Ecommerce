@@ -10,37 +10,41 @@ function App()  {
 
     const fetchProducts = async () =>{
         const {data} = await commerce.products.list()
-      return  setProducts(data)
+      return  (setProducts(data))
     }
     const fetchCart =async () =>{
        return (setCart(await commerce.cart.retrieve()))
     }
     const handleAddToCart = async (productId, quantity) =>{
-        const  cart = await commerce.cart.add(productId, quantity)
-     return   setCart(cart)
+        const  item = await commerce.cart.add(productId, quantity)
+     return   (setCart(item.cart))
     }
     const handleUpdateCartQty = async (productId, quantity) =>{
-        const {cart} = await commerce.cart.update(productId, {quantity})
-      return  setCart(cart)
+        const response = await commerce.cart.update(productId, {quantity})
+      return  (setCart(response.cart))
     }
     const handleRemoveFromCart = async ( productId) => {
-        const {cart} = await commerce.cart.remove(productId)
-        return    setCart(cart)
+        const response = await commerce.cart.remove(productId)
+        return    (setCart(response.cart))
     }
     const handleEmptyCart = async () =>{
-        return setCart(await commerce.cart.empty())
+          const response = await commerce.cart.empty();
+
+           return     setCart(response.cart);
 
     }
 
     const refreshCart = async () =>{
         const newCart = await commerce.cart.refresh()
-        return setCart(newCart)
+        return (setCart(newCart))
     }
 
     const handleCaptureCheckout =async (CheckoutTokenId, newOrder) =>{
         try {
             const incomingOrder = await commerce.checkout.capture(CheckoutTokenId,newOrder )
+            console.log(incomingOrder)
             setOrder(incomingOrder)
+
             refreshCart()
         } catch (error) {
             setErrorMessage(error.data.error.message)   
@@ -52,11 +56,11 @@ function App()  {
          fetchCart()
      },[])
     //  console.log(products)
-     console.log(cart)
+    //  console.log(cart)
     return (
         <Router>
 
-        <div>
+        <div style={{display: 'flex'}}>
         <Navbar totalItems = {cart.total_items}></Navbar>
         <Switch>
             <Route exact path='/'>
@@ -67,7 +71,7 @@ function App()  {
                 cart={cart}
                 handleUpdateCartQty = {handleUpdateCartQty}
                 handleRemoveFromCart = {handleRemoveFromCart}
-                handleEmptyCart = {handleEmptyCart}
+                onEmptyCart = {handleEmptyCart}
                 ></Cart>
             </Route>
             <Route exact path='/checkout'>
